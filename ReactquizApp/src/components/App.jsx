@@ -1,4 +1,4 @@
-import { useEffect, useReducer } from "react";
+import { useReducer } from "react";
 
 import Header from "./Header.jsx";
 import MainContent from "./mainContent.jsx";
@@ -12,25 +12,31 @@ import FinishScreen from "./FinishScreen.jsx";
 import Footer from "./Footer.jsx";
 import Timer from "./Timer.jsx";
 
+import data from "/data/questions.json";
+
+console.log(data.questions);
+
 const SECS_PER_QUESTIONS = 30;
 
 const initialState = {
-  questions: [],
+  questions: data.questions,
   // loading, error, ready, active, finished
-  status: "loading",
+  status: "ready",
   index: 0,
   answer: null,
   points: 0,
   highscore: 0,
-  secondsRemaining: null,
+  secondsRemaining: 10,
 };
 
 function reducer(state, action) {
   switch (action.type) {
+    /*
     case "dataReceived":
       return { ...state, questions: action.payload, status: "ready" };
-    case "dataFailed":
-      return { ...state, status: "error" };
+      case "dataFailed":
+        return { ...state, status: "error" };
+        */
     case "start":
       return {
         ...state,
@@ -88,12 +94,20 @@ function App() {
   const numQuestions = questions.length;
   const maxPossiblePoints = questions.reduce((acc, cur) => acc + cur.points, 0);
 
+  /*
   useEffect(() => {
+    
     fetch("http://localhost:8000/questions")
       .then((res) => res.json())
       .then((data) => dispatch({ type: "dataReceived", payload: data }))
       .catch((err) => dispatch({ type: "dataFailed", massage: err }));
-  }, []);
+    
+
+    dispatch({ type: "dataReceived", payload: data });
+    if (!data) {
+      dispatch({ type: "dataFailed" });
+    }
+  */
 
   return (
     <div className="app">
